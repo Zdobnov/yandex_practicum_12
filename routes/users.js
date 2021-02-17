@@ -2,39 +2,25 @@ const router = require('express').Router();
 const path = require('path');
 const fs = require('fs');
 
-router.get('/', (req, res) => {
-  fs.readFile(
-    path.join(__dirname, '../data/users.json'),
-    {
-      encoding: 'utf8',
-    },
-    (err, data) => {
-      if (err) throw err;
+const readFile = require('../utils/readFile');
 
-      res.send(JSON.parse(data));
-    }
-  );
+router.get('/', (req, res) => {
+  readFile('../data/users.json')
+    .then(data => {
+      res.send(data);
+    });
 });
 router.get('/:id', (req, res) => {
-  fs.readFile(
-    path.join(__dirname, '../data/users.json'),
-    {
-      encoding: 'utf8',
-    },
-    (err, data) => {
-      if (err) throw err;
+  readFile('../data/users.json')
+    .then(data => {
+      const { id } = req.params;
 
-      const id = req.params.id;
-
-      const user = JSON.parse(data).filter(item => {
-        return item._id === id;
-      });
+      const user = data.filter(item => item._id === id);
 
       user.length ?
         res.send(user) :
         res.status(404).send({ message: 'Page not found' });
-    }
-  );
+    });
 });
 
 module.exports = router;

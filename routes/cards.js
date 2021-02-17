@@ -2,18 +2,13 @@ const router = require('express').Router();
 const path = require('path');
 const fs = require('fs');
 
-router.get('/', (req, res) => {
-  fs.readFile(
-    path.join(__dirname, '../data/cards.json'),
-    {
-      encoding: 'utf8',
-    },
-    (err, data) => {
-      if (err) throw err;
+const readFile = require('../utils/readFile');
 
-      res.send(JSON.parse(data));
-    }
-  );
+router.get('/', (req, res) => {
+  readFile('../data/cards.json')
+    .then(data => {
+      res.send(data);
+    });
 });
 
 module.exports = router;
