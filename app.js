@@ -11,9 +11,8 @@ const { /*BASE_PATH,*/ PORT = 3000 } = process.env;
 // app creation
 const app = express();
 
-// TODO: why do I need it?
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // routes connection
 app.use('/', routes);

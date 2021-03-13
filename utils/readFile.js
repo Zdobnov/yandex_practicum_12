@@ -1,20 +1,10 @@
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs').promises;
 
-const readFile = filePath => new Promise((resolve, reject) => {
-  fs.readFile(
-    path.join(__dirname, filePath),
-    {
-      encoding: 'utf8',
-    },
-    (error, data) => {
-      if (error) {
-        reject(error);
-      };
-
-      resolve(JSON.parse(data));
-    }
-  );
-});
+const readFile = filePath => fs.readFile(path.join(__dirname, filePath), { encoding: 'utf8' })
+  .then(data => JSON.parse(data))
+  .catch(error => ({
+    error: `No such file or directory: ${error.path}`,
+  }));
 
 module.exports = readFile;
